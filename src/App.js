@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
-import { isEmpty, iteratee, size } from 'lodash'
-import shortid, { isValid } from 'shortid'
+import React, { useState, useEffect } from 'react'
+//import { isEmpty, iteratee, size } from 'lodash'
+import { isEmpty, size } from 'lodash'
+import { addDocument, deleteDocument, getCollection, updateDocument } from './actions'
+//import shortid, { isValid } from 'shortid'
 
 
 function App() {
@@ -9,6 +11,17 @@ function App() {
   const [editMode, setEditMode] = useState(false)
   const [id, setId] = useState("")
   const [error, setError] = useState(null)
+
+
+  useEffect(() => {
+    (async () => {
+      const result = await getCollection("tasks")
+      if (result.statusResponse) {
+        setTasks(result.data)
+      }
+      
+    })()
+}, [])
 
   
   const validForm = () => {  
@@ -22,26 +35,33 @@ function App() {
   return isValid
   }
 
-  const addTask = (e) => {
+  const addTask = async (e) => {
     e.preventDefault()
 
     if (!validForm()){
       return
     }
 
-
-    const newTask = {
-      id: shortid.generate(),
-      name: task
+    const result = await addDocument("tasks", { name: task })
+    if(!result.statusResponse) {
+      setError(result.error)
+      return
     }
-    setTasks([ ...tasks, newTask])
+
+    setTasks([ ...tasks, {id: result.data.id, name: task}])
     setTask("")
   }
 
-  const saveTask = (e) => {
+  const saveTask = async (e) => {
     e.preventDefault()
 
     if (!validForm()){
+      return
+    }
+
+    const result = await updateDocument("tasks", id, { name: task})
+    if(!result.statusResponse){
+      setError(result.error)
       return
     }
 
@@ -52,7 +72,13 @@ function App() {
     setId("")
   }
 
-  const deleteTask = (id) => {
+  const deleteTask = async (id) => {
+    const result = await deleteDocument("tasks", id)
+    if (!result.statusResponse){
+      setError(result.error)
+      return
+      }
+      
     const filteredTasks = tasks.filter(task => task.id !== id)
     setTasks(filteredTasks)
   }
