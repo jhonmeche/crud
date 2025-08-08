@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Clientes{% endblock %}
+{% block content %}
+<h2>Clientes</h2>
+<table class="list">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Teléfono</th>
+      <th>Email</th>
+      <th>Documento</th>
+      <th>Dirección</th>
+      <th>Alta</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for c in clients %}
+    <tr>
+      <td>{{ c.name }}</td>
+      <td>{{ c.phone_e164 }}</td>
+      <td>{{ c.email or '' }}</td>
+      <td>{{ c.document or '' }}</td>
+      <td>{{ c.address or '' }}</td>
+      <td>{{ c.created_at }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

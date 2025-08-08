@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Orden #{{ order.id }}{% endblock %}
+{% block content %}
+<h2>Orden #{{ order.id }}</h2>
+<section class="card">
+  <h3>Cliente</h3>
+  <p><strong>{{ client.name }}</strong> · {{ client.phone_e164 }} · {{ client.email or '' }}</p>
+  <p>{{ client.address or '' }}</p>
+</section>
+
+<section class="card">
+  <h3>Equipo</h3>
+  <p>{{ device.device_type }} · {{ device.brand or '' }} {{ device.model or '' }} · Serie: {{ device.serial or 'N/D' }}</p>
+  <p>Accesorios: {{ device.accessories or 'N/D' }}</p>
+  <p>Estado físico: {{ device.physical_condition or 'N/D' }}</p>
+  <p>Observaciones: {{ device.observations or 'N/D' }}</p>
+</section>
+
+<section class="card">
+  <h3>Recepción</h3>
+  <p>Falla reportada: {{ order.issue_description }}</p>
+  <p>Contraseña: {{ order.password or 'N/D' }}</p>
+  <p>Valor estimado: {{ order.estimate_amount or 'N/D' }}</p>
+  <p>Estado actual: <strong>{{ order.status }}</strong></p>
+</section>
+
+<section class="card">
+  <h3>Actualizar estado</h3>
+  <form method="post" action="/ordenes/{{ order.id }}/evento" class="form-inline">
+    <label>Estado
+      <select name="status" required>
+        {% for s in ['diagnostico','en_reparacion','en_espera','listo','entregado','cancelado'] %}
+        <option value="{{ s }}">{{ s }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Notas
+      <input name="notes" />
+    </label>
+    <label>
+      <input type="checkbox" name="notify" value="true" /> Notificar por WhatsApp
+    </label>
+    <button type="submit">Guardar</button>
+  </form>
+</section>
+
+<section class="card">
+  <h3>Historial</h3>
+  <ul>
+    {% for e in events %}
+      <li>{{ e.created_at }} · <strong>{{ e.status }}</strong> · {{ e.notes or '' }}</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<p><a href="/ordenes/">Volver al listado</a></p>
+{% endblock %}
