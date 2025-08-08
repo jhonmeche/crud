@@ -1,70 +1,54 @@
-# Getting Started with Create React App
+# Taller Servicio Técnico (FastAPI)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sistema simple para gestionar clientes, equipos y órdenes de servicio de un taller de computadores e impresoras. Envía automáticamente un mensaje de recepción al WhatsApp del cliente usando WhatsApp Cloud API.
 
-## Available Scripts
+## Requisitos
+- Python 3.11+ (con `pip` disponible)
+- Variables de entorno de WhatsApp Cloud API (ver `.env.example`)
 
-In the project directory, you can run:
+## Instalación
+En algunos entornos no es posible crear `venv`. Si puedes, usa:
 
-### `yarn start`
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Si no, instala paquetes en usuario (puede requerir `--break-system-packages`):
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+python3 -m pip install --user fastapi "uvicorn[standard]" sqlmodel jinja2 python-dotenv httpx
+```
 
-### `yarn test`
+## Variables de entorno
+Crea un archivo `.env` en la raíz del proyecto:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+WHATSAPP_PHONE_NUMBER_ID=1234567890
+WHATSAPP_TOKEN=EAAG....
+WHATSAPP_API_BASE=https://graph.facebook.com/v19.0
+```
 
-### `yarn build`
+- Asegúrate de usar números de cliente en formato E.164 (por ej. `57XXXXXXXXXX`).
+- Para pruebas, WhatsApp Cloud API solo envía a números agregados como "testers" o a usuarios que han iniciado conversación con tu número de negocio.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Ejecutar
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Abre `http://localhost:8000/`.
 
-### `yarn eject`
+## Flujo
+- Crea una nueva orden en `Órdenes > Nueva orden`.
+- Al guardar, se crea/actualiza el cliente, se registra el equipo y la orden en estado "recibido".
+- Se envía un WhatsApp de confirmación al cliente.
+- Desde el detalle de la orden, puedes avanzar estados y opcionalmente notificar por WhatsApp.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Base de datos
+SQLite en `app.db` (se crea automáticamente). Para resetear, borra `app.db` (perderás datos).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Seguridad
+Este demo no implementa autenticación. Para producción agrega auth (por ej. OAuth2/Keycloak) y permisos por rol.

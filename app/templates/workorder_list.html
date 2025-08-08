@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Órdenes{% endblock %}
+{% block content %}
+<h2>Órdenes</h2>
+<p><a class="button" href="/ordenes/nueva">+ Nueva orden</a></p>
+<table class="list">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Fecha</th>
+      <th>Cliente</th>
+      <th>Equipo</th>
+      <th>Estado</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for o in orders %}
+    {% set d = devices.get(o.device_id) %}
+    {% set c = clients.get(d.client_id) if d else None %}
+    <tr>
+      <td>#{{ o.id }}</td>
+      <td>{{ o.created_at }}</td>
+      <td>{{ c.name if c else 'N/D' }}</td>
+      <td>{{ d.device_type if d else '' }} {{ d.brand or '' }} {{ d.model or '' }}</td>
+      <td><strong>{{ o.status }}</strong></td>
+      <td><a href="/ordenes/{{ o.id }}">Abrir</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
