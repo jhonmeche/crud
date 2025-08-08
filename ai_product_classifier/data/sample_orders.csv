@@ -1,0 +1,16 @@
+producto,cantidad,cliente,categoria,fecha_entrega,urgencia,precio
+Chocolate Snickers,50,Tienda ABC,golosinas,2024-01-15,media,1.5
+Atún enlatado Van Camps,30,Supermercado XYZ,enlatados,2024-01-14,alta,2.8
+Coca Cola 2L,24,Restaurante DEF,bebidas,2024-01-16,baja,3.2
+Papas fritas Lays,40,Tienda GHI,snacks,2024-01-13,urgente,2.1
+Galletas Oreo,60,Panadería JKL,golosinas,2024-01-17,media,1.8
+Cerveza Corona,48,Bar MNO,bebidas,2024-01-15,alta,1.9
+Sardinas enlatadas,25,Tienda PQR,enlatados,2024-01-18,baja,1.6
+Maní salado,35,Cine STU,snacks,2024-01-14,media,2.3
+Leche deslactosada,20,Cafetería VWX,productos_frescos,2024-01-13,urgente,2.5
+Agua mineral 600ml,100,Gimnasio YZ,bebidas,2024-01-16,media,0.8
+Chocolate Milka,45,Tienda ABC,golosinas,2024-01-19,baja,2.2
+Salsa de tomate,18,Restaurante DEF,enlatados,2024-01-15,alta,1.4
+Yogurt griego,30,Supermercado XYZ,productos_frescos,2024-01-14,urgente,3.1
+Doritos Nacho,55,Tienda GHI,snacks,2024-01-17,media,2.7
+Refresco Pepsi 2L,36,Bar MNO,bebidas,2024-01-16,baja,3.0
