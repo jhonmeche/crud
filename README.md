@@ -52,3 +52,12 @@ SQLite en `app.db` (se crea automáticamente). Para resetear, borra `app.db` (pe
 
 ## Seguridad
 Este demo no implementa autenticación. Para producción agrega auth (por ej. OAuth2/Keycloak) y permisos por rol.
+
+## Ejecutar con Docker
+
+```bash
+docker build -t taller .
+docker run -p 8000:8000 --env-file .env taller
+```
+
+Abre `http://<IP_DEL_SERVIDOR>:8000/` desde los teléfonos en la misma red para que los técnicos puedan actualizar órdenes.
