@@ -10,6 +10,7 @@ from sqlmodel import Session, select
 from app.database import get_session
 from app.models import Client, Device, WorkOrder, WorkOrderEvent
 from app.services.whatsapp import WhatsAppService
+from app import analytics
 
 
 router = APIRouter(prefix="/ordenes", tags=["ordenes"])
@@ -87,6 +88,8 @@ async def create_order(
     session.add(event)
     session.commit()
 
+    analytics.invalidate_cache()
+
     # Enviar WhatsApp de recepción
     wa = WhatsAppService()
     receipt_text = (
@@ -157,6 +160,8 @@ async def add_event(
     session.add(order)
 
     session.commit()
+
+    analytics.invalidate_cache()
 
     if notify:
         device = session.get(Device, order.device_id)
