@@ -9,6 +9,7 @@ from fastapi.templating import Jinja2Templates
 from app.database import init_db
 from app.routers import clients as clients_router
 from app.routers import workorders as workorders_router
+from app.routers import analytics
 
 
 app = FastAPI(title="Taller Servicio Técnico")
@@ -30,6 +31,7 @@ async def index(request: Request) -> HTMLResponse:
 
 app.include_router(workorders_router.router)
 app.include_router(clients_router.router)
+app.include_router(analytics.router)
 
 
 if __name__ == "__main__":
