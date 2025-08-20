@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import uvicorn
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -25,7 +25,7 @@ async def on_startup() -> None:
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request) -> HTMLResponse:
-    return RedirectResponse(url="/ordenes/")
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 app.include_router(workorders_router.router)
